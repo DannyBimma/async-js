@@ -1,2 +1,2 @@
 # async-js
-Jonas's course and asynchoronous JavaScript
+Jonas's course on asynchoronous JavaScript
