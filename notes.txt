@@ -28,3 +28,6 @@ A pending promise can either be fulfilled with a value or rejected with a reason
 Chaining Promises:
 The methods promise.then(), promise.catch(), and promise.finally() are used to associate further action with a promise that becomes settled.
 The .then() method takes up to two arguments; the first argument is a callback function for the resolved case of the promise, and the second argument is a callback function for the rejected case. Each .then() returns a newly generated promise object, which can optionally be used for chaining.
+
+Handling Rejected Promises:
+he catch() method returns a Promise and deals with rejected cases only. It behaves the same as calling Promise.prototype.then(undefined, onRejected) (in fact, calling obj.catch(onRejected) internally calls obj.then(undefined, onRejected)). This means that you have to provide an onRejected function even if you want to fall back to an undefined result value - for example obj.catch(() => {}). 
