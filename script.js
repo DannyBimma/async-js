@@ -3,6 +3,29 @@
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
+const errorMsg = msg => {
+  countriesContainer.insertAdjacentText(`beforeend`, msg);
+  // countriesContainer.style.opacity = 1;
+};
+
+const renderCountry = function (countryData, className = ``) {
+  // display cards in on page with data from API:
+  const html = `
+   <article class="country ${className}">
+   <img class="country__img" src="${countryData.flags.svg}" />
+       <div class="country__data">
+       <h3 class="country__name">${countryData.name.official}</h3>
+       <h4 class="country__region">${countryData.region}</h4>
+       <p class="country__row"><span>👫</span>${countryData.population}</p>
+       <p class="country__row"><span>⚽️</span>${countryData.fifa}</p>
+       <p class="country__row"><span>🌍</span>${countryData.subregion}</p>
+   </div>
+   </article>`;
+
+  countriesContainer.insertAdjacentHTML(`beforeend`, html);
+  // countriesContainer.style.opacity = 1;
+};
+
 ///////////////////////////////////////
 
 // Make an AJAX call using XML-HTTP-Request:
@@ -38,24 +61,6 @@ const countriesContainer = document.querySelector('.countries');
 // };
 
 // countryCard(`barbados`);
-
-const renderCountry = function (data, className = ``) {
-  // display cards in on page with data from API:
-  const html = `
-   <article class="country ${className}">
-   <img class="country__img" src="${data.flags.svg}" />
-       <div class="country__data">
-       <h3 class="country__name">${data.name.official}</h3>
-       <h4 class="country__region">${data.region}</h4>
-       <p class="country__row"><span>👫</span>${data.population}</p>
-       <p class="country__row"><span>⚽️</span>${data.fifa}</p>
-       <p class="country__row"><span>🌍</span>${data.subregion}</p>
-   </div>
-   </article>`;
-
-  countriesContainer.insertAdjacentHTML(`beforeend`, html);
-  countriesContainer.style.opacity = 1;
-};
 
 /*
 const nextCountryCard = function (country) {
@@ -141,7 +146,18 @@ const getCountryData = function (country) {
       return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
     })
     .then(response => response.json())
-    .then(data => renderCountry(data[0], `neighbour`));
+    .then(data => renderCountry(data[0], `neighbour`))
+    .catch(error => {
+      console.log(`🤦🏾‍♂️Check ya internet fam!! ${error}!!`);
+      errorMsg(
+        `🤦🏾‍♂️ Looking like ya internet a bit shaky fam!! ${error.message}!! Wheel and come again!! `
+      );
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
 };
 
-getCountryData(`canada`);
+btn.addEventListener(`click`, () => {
+  getCountryData(`canada`);
+});
