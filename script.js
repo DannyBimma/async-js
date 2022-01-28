@@ -131,27 +131,38 @@ const getCountryData = function (country) {
 };
 */
 
+// Create helper function (which will return a promise) to make AJAX call and convert to JSON:
+const bootJSON = function (url, errorMsg = `Whoops, something's gone awry!!`) {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`❌ ${response.status}: ${errorMsg}`);
+
+    return response.json();
+  });
+};
+
 // Replicate above with arrow functions:
 const getCountryData = function (country) {
-  // get main country
-  fetch(`https://restcountries.com/v3.1/name/${country}`) // fetch returns a promise
-    .then(response => response.json())
+  bootJSON(
+    `https://restcountries.com/v3.1/name/${country}`,
+    `Country "${country}" can't be found!`
+  )
     .then(data => {
       renderCountry(data[0]);
       const neighbour = data[0].borders[0];
 
-      if (!neighbour) return;
+      if (neighbour == undefined)
+        throw new Error(`The country of ${country} has no bordering nation!`);
 
-      // get neighbour country:
-      return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
+      // get border country:
+      return bootJSON(
+        `https://restcountries.com/v3.1/alpha/${neighbour}`,
+        `Neighbouring country for "${country}" can't be found!`
+      );
     })
-    .then(response => response.json())
     .then(data => renderCountry(data[0], `neighbour`))
     .catch(error => {
-      console.log(`🤦🏾‍♂️Check ya internet fam!! ${error}!!`);
-      errorMsg(
-        `🤦🏾‍♂️ Looking like ya internet a bit shaky fam!! ${error.message}!! Wheel and come again!! `
-      );
+      console.error(error);
+      errorMsg(`${error.message}. Please Try Again!! `);
     })
     .finally(() => {
       countriesContainer.style.opacity = 1;
@@ -159,5 +170,47 @@ const getCountryData = function (country) {
 };
 
 btn.addEventListener(`click`, () => {
-  getCountryData(`canada`);
+  getCountryData(`Barbados`);
 });
+
+/*
+// Replicate above with arrow functions:
+const getCountryData = function (country) {
+  // get main country
+  fetch(`https://restcountries.com/v3.1/name/${country}`) // fetch returns a promise
+    .then(response => {
+      console.log(response);
+      if (!response.ok)
+        throw new Error(
+          `❌ ${response.status}: The country "${country}" does not exist!`
+        );
+      return response.json();
+    })
+    .then(data => {
+      renderCountry(data[0]);
+      const neighbour = data[0].borders[110];
+
+      // get neighbour country:
+      return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
+    })
+    .then(response => {
+      if (!response.ok)
+        throw new Error(
+          `❌ ${response.status}: The country "${country}" does not exist!`
+        );
+      return response.json();
+    })
+    .then(data => renderCountry(data[0], `neighbour`))
+    .catch(error => {
+      console.error(error);
+      errorMsg(`${error.message}. Please Try Again!! `);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
+};
+
+btn.addEventListener(`click`, () => {
+  getCountryData(`spain`);
+});
+*/
