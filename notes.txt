@@ -35,4 +35,37 @@ The catch() method returns a Promise and deals with rejected cases only. It beha
 Throwing Errors Manually:
 The throw statement throws a user-defined exception. Execution of the current function will stop (the statements after throw won't be executed), and control will be passed to the first catch block in the call stack. If no catch block exists among caller functions, the program will terminate. 
 
+Rest Countries API v3 Breaking Changes(meta):
+Some things are a little broken when using v2. The promise always seems to return an ok: true  so we can't use it as a way to throw our error. Fortunately, using v3.1 of the rest countries API resolves this issue and you can follow along with the videos. So you want to use these two: https://restcountries.com/v3.1/name/ and https://restcountries.com/v3.1/alpha/
+
+However, there are a few pieces of code that you'll need to alter to pull all the information needed correctly.
+
+Firstly, you need to adjust your neighbour variable from const neighbour = data[0].borders[0] to const neighbour = data[0].borders. This fixes a problem where neighbour doesn't return anything (not even undefined).
+
+Secondly, you need to adjust your neighbour getJSON to  https://restcountries.com/v3.1/alpha/${neighbour[0]} as we still only want the first country if it does exist.
+
+Lastly we need to adjust our renderCountry function to correctly collect all the information we need to display.
+
+    function renderCountry(data, className = "") {
+      const html = `
+      <article class="country ${className}">
+          <img class="country__img" src="${data.flags.png}" />
+          <div class="country__data">
+              <h3 class="country__name">${data.name.common}</h3>
+              <h4 class="country__region">${data.region}</h4>
+              <p class="country__row"><span>👫</span>${Number(
+                data.population / 1000000
+              ).toFixed()}M people</p>
+              <p class="country__row"><span>🗣️</span>${
+                Object.values(data.languages)[0]
+              }</p>
+              <p class="country__row"><span>💰</span>${
+                Object.values(data.currencies)[0].name
+              }</p>
+          </div>
+      </article>`;
+     
+      countriesContainer.insertAdjacentHTML("beforeend", html);
+    }
+
 

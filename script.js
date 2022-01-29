@@ -17,8 +17,12 @@ const renderCountry = function (countryData, className = ``) {
        <h3 class="country__name">${countryData.name.official}</h3>
        <h4 class="country__region">${countryData.region}</h4>
        <p class="country__row"><span>👫</span>${countryData.population}</p>
-       <p class="country__row"><span>⚽️</span>${countryData.fifa}</p>
-       <p class="country__row"><span>🌍</span>${countryData.subregion}</p>
+       <p class="country__row"><span>🗣</span>${
+         Object.values(countryData.languages)[0]
+       }</p>
+       <p class="country__row"><span>💰</span>${
+         Object.values(countryData.currencies)[0].name
+       }</p>
    </div>
    </article>`;
 
@@ -148,14 +152,15 @@ const getCountryData = function (country) {
   )
     .then(data => {
       renderCountry(data[0]);
-      const neighbour = data[0].borders[0];
+      const neighbour = data[0].borders;
+      console.log(neighbour);
 
-      if (neighbour == undefined)
+      if (!neighbour)
         throw new Error(`The country of ${country} has no bordering nation!`);
 
       // get border country:
       return bootJSON(
-        `https://restcountries.com/v3.1/alpha/${neighbour}`,
+        `https://restcountries.com/v3.1/alpha/${neighbour[0]}`,
         `Neighbouring country for "${country}" can't be found!`
       );
     })
