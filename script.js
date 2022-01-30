@@ -272,3 +272,29 @@ TEST COORDINATES 2: 19.037, 72.873
 TEST COORDINATES 2: -33.933, 18.474
 GOOD LUCK 😀
 */
+
+// 1.
+const whereAmI = function (lat, lng) {
+  // 2. & 3. 5.
+  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+    .then(response => {
+      console.log(response);
+      if (!response.ok)
+        throw new Error(`❌ ${response.status}: Response was unresponsive`);
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      console.log(`You are in ${data.state}, ${data.country}.`);
+      // 6. 7.
+      getCountryData(`${data.country}`);
+    })
+    // 4.
+    .catch(error => {
+      console.error(`😢 Sorry: ${error.message}.`);
+    });
+};
+
+// whereAmI(19.037, 72.873);
+// whereAmI(52.508, 13.381);
+// whereAmI(-33.933, 18.474);
