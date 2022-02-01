@@ -164,7 +164,9 @@ const renderCountry = function (countryData, className = ``) {
        <div class="country__data">
        <h3 class="country__name">${countryData.name.official}</h3>
        <h4 class="country__region">${countryData.region}</h4>
-       <p class="country__row"><span>👫</span>${countryData.population}</p>
+       <p class="country__row"><span>👫</span>${(
+         +countryData.population / 1000000
+       ).toFixed(2)}M</p>
        <p class="country__row"><span>🗣</span>${
          Object.values(countryData.languages)[0]
        }</p>
@@ -224,7 +226,7 @@ const getCountryData = function (country) {
 };
 
 btn.addEventListener(`click`, () => {
-  getCountryData(`Barbados`);
+  getCountryData(`Canada`);
 });
 
 ///////////////////////////////////////

@@ -69,3 +69,20 @@ Lastly we need to adjust our renderCountry function to correctly collect all the
     }
 
 
+Asynchronous JS Behind the Scenes (The Event Loop):
+JavaScript has a runtime model based on an event loop, which is responsible for executing the code, collecting and processing events, and executing queued sub-tasks. This model is quite different from models in other languages like C and Java.
+
+Heap
+Objects are allocated in a heap which is just a name to denote a large (mostly unstructured) region of memory.
+
+Queue
+A JavaScript runtime uses a message queue, which is a list of messages to be processed. Each message has an associated function that gets called to handle the message.
+At some point during the event loop, the runtime starts handling the messages on the queue, starting with the oldest one. To do so, the message is removed from the queue and its corresponding function is called with the message as an input parameter. As always, calling a function creates a new stack frame for that function's use.
+The processing of functions continues until the stack is once again empty. Then, the event loop will process the next message in the queue (if there is one).
+
+Never blocking
+A very interesting property of the event loop model is that JavaScript, unlike a lot of other languages, never blocks. Handling I/O is typically performed via events and callbacks, so when the application is waiting for an IndexedDB query to return or an XHR request to return, it can still process other things like user input.
+Legacy exceptions exist like alert or synchronous XHR, but it is considered good practice to avoid them. Beware: exceptions to the exception do exist (but are usually implementation bugs, rather than anything else).
+
+
+
