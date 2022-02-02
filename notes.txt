@@ -84,5 +84,22 @@ Never blocking
 A very interesting property of the event loop model is that JavaScript, unlike a lot of other languages, never blocks. Handling I/O is typically performed via events and callbacks, so when the application is waiting for an IndexedDB query to return or an XHR request to return, it can still process other things like user input.
 Legacy exceptions exist like alert or synchronous XHR, but it is considered good practice to avoid them. Beware: exceptions to the exception do exist (but are usually implementation bugs, rather than anything else).
 
+The Event Loop in Practice:
+
+console.log(`Event loop test commencement:`);
+setTimeout(() => console.log(`0 sec timer!`), 0);
+Promise.resolve(`Promise resolution #1`).then(response =>
+  console.log(response)
+);
+console.log(`Event loop test termination`);
+
+In the code example above (also in script.js), the lines of code won't print to the console in the order that they appear. This is due to the priority JS gives to the micro-tasks queue over the callback queue. So, the two synchronous log statements will print to the console first. Then the immediately resolved promise, and lastly the timer callback.
+
+Promise.resolve(`Promise resolution #2`).then(response => {
+  for (let i = 0; i < 888888888; i++) {}
+  console.log(response);
+});
+
+And in this one, the promise will block all code in the callback queue from being pulled onto the call-stack and executed until it's micro-task is finished.  
 
 
