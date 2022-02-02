@@ -300,3 +300,19 @@ const whereAmI = function (lat, lng) {
 // whereAmI(19.037, 72.873);
 // whereAmI(52.508, 13.381);
 // whereAmI(-33.933, 18.474);
+
+// THE EVENT LOOP IN PRACTICE:
+console.log(`THE EVENT LOOP IN PRACTICE:`);
+
+console.log(`Event loop test commencement:`);
+setTimeout(() => console.log(`0 sec timer!`), 0);
+Promise.resolve(`Promise resolution #1`).then(response =>
+  console.log(response)
+);
+console.log(`Event loop test termination`);
+
+// Create a promise with a long micro-task:
+Promise.resolve(`Promise resolution #2`).then(response => {
+  for (let i = 0; i < 888888888; i++) {}
+  console.log(response);
+});
