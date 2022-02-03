@@ -312,7 +312,78 @@ Promise.resolve(`Promise resolution #1`).then(response =>
 console.log(`Event loop test termination`);
 
 // Create a promise with a long micro-task:
-Promise.resolve(`Promise resolution #2`).then(response => {
-  for (let i = 0; i < 888888888; i++) {}
-  console.log(response);
+// Promise.resolve(`Promise resolution #2`).then(response => {
+//   for (let i = 0; i < 888888888; i++) {}
+//   console.log(response);
+// });
+
+// Create a new Promise:
+const lottoPromise = new Promise(function (resolve, reject) {
+  console.log(`💸Lotto Draw Starts Now💸`);
+  // create asynchronous functionality:
+  setTimeout(function () {
+    // define promise resolution & rejection:
+    if (Math.random() >= 0.5) {
+      resolve(`🎉 CONGRATS... YA WIN DE LOTTO!!`);
+    } else {
+      reject(new Error(`💩 OH SHIT... ya money burn!!`));
+    }
+  }, 5000);
+});
+
+// Consume the promise you just created:
+lottoPromise
+  .then(resolution => console.log(resolution))
+  .catch(rejection => console.error(rejection));
+
+// Create a setTimeout counter using promises:
+const counter = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds + 1000);
+  });
+};
+
+// Consume counter:
+counter(1)
+  .then(() => {
+    console.log(`Count Number: #1`);
+    return counter(2);
+  })
+  .then(() => {
+    console.log(`Count Number: #2`);
+    return counter(2);
+  })
+  .then(() => {
+    console.log(`Count Number: #3`);
+    return counter(2);
+  })
+  .then(() => {
+    console.log(`Count Number: #4`);
+    return counter(2);
+  })
+  .then(() => {
+    console.log(`Count Number: #5`);
+    return counter(2);
+  })
+  .then(() => {
+    console.log(`Count Number: #6`);
+    return counter(2);
+  })
+  .then(() => {
+    console.log(`Count Number: #7`);
+    return counter(2);
+  })
+  .then(() => {
+    console.log(`Count Number: #8`);
+  });
+
+// Create promises that resolve & reject immediately:
+Promise.resolve(`✊🏾 The resolution will be console logged!`).then(
+  resolution => {
+    console.log(resolution);
+  }
+);
+
+Promise.reject(`🙅🏾‍♂️ No resolve, pure rejection!`).catch(rejection => {
+  new Error(rejection);
 });

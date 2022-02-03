@@ -100,6 +100,12 @@ Promise.resolve(`Promise resolution #2`).then(response => {
   console.log(response);
 });
 
-And in this one, the promise will block all code in the callback queue from being pulled onto the call-stack and executed until it's micro-task is finished.  
+And in this one, the promise will block all code in the callback queue from being pulled onto the call-stack and executed until it's micro-task is finished. 
+
+
+Building a Simple Promise:
+Like many other built0in objects, you can create a promise by you the new constructor keyword (new Promise). Which essentially means that a promise is just a special type of constructor. The promise constructor takes only one argument, which is called the executor function. When the promise constructor executes the executor function, it does so by passing two additional arguments which are called the resolve and reject functions. The executor function passed into the promise is the function that has the asynchronous behavior that you will have to handle with the promise. So the executor function will have to produce a result value, which will be the future value of the promise itself. When you define functionality within the executor function's block, you should call the resolve function on the result of that functionality ti fullfil the promise. And into the the resolve function, you should passed the fulfilled value of the promise so it can be consumed by the then method. So whenever value you pass into the resolve function, will be the result of the promise available to the then method.
+
+To mark the promise as rejected you do the same. Call the reject function on result of the functionality you want to handle with the catch method. 
 
 
