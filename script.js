@@ -114,7 +114,7 @@ nextCountryCard(`canada`);
 */
 
 /*
-// Replicate above with arrow functions:
+// Replicate above with arrow functions and callbacks:
 const getCountryData = function (country) {
   // get main country
   fetch(`https://restcountries.com/v3.1/name/${country}`) // fetch returns a promise
@@ -186,6 +186,9 @@ const errorMsg = msg => {
   // countriesContainer.style.opacity = 1;
 };
 
+///////////////////////////////////////////////////////////////////////////
+// Promisify the fetch API AJAX calls and consume them:
+
 // Create helper function (which will return a promise) to make AJAX call and convert to JSON:
 const bootJSON = function (url, errorMsg = `Whoops, something's gone awry!!`) {
   return fetch(url).then(response => {
@@ -195,21 +198,24 @@ const bootJSON = function (url, errorMsg = `Whoops, something's gone awry!!`) {
   });
 };
 
-// Replicate above with arrow functions:
 const getCountryData = function (country) {
+  // get country data from rest countries API:
   bootJSON(
     `https://restcountries.com/v3.1/name/${country}`,
     `The country of "${country}" can't be found!`
   )
     .then(data => {
+      console.log(data);
+      // use the API data to render country card:
       renderCountry(data[0]);
+      // store border country:
       const neighbour = data[0].borders;
       console.log(neighbour);
 
       if (!neighbour)
         throw new Error(`The country of ${country} has no bordering nation!`);
 
-      // get border country:
+      // get border country from API:
       return bootJSON(
         `https://restcountries.com/v3.1/alpha/${neighbour[0]}`,
         `Neighbouring country for "${country}" can't be found!`
@@ -225,11 +231,11 @@ const getCountryData = function (country) {
     });
 };
 
-btn.addEventListener(`click`, () => {
-  getCountryData(`Canada`);
-});
+// btn.addEventListener(`click`, () => {
+//   getCountryData(`Canada`);
+// });
 
-///////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
 // Coding Challenge #1
 
 /* 
@@ -275,6 +281,7 @@ TEST COORDINATES 2: -33.933, 18.474
 GOOD LUCK 😀
 */
 
+/*
 // 1.
 const whereAmI = function (lat, lng) {
   // 2. & 3. 5.
@@ -300,7 +307,9 @@ const whereAmI = function (lat, lng) {
 // whereAmI(19.037, 72.873);
 // whereAmI(52.508, 13.381);
 // whereAmI(-33.933, 18.474);
+*/
 
+/*
 // THE EVENT LOOP IN PRACTICE:
 console.log(`THE EVENT LOOP IN PRACTICE:`);
 
@@ -387,3 +396,56 @@ Promise.resolve(`✊🏾 The resolution will be console logged!`).then(
 Promise.reject(`🙅🏾‍♂️ No resolve, pure rejection!`).catch(rejection => {
   new Error(rejection);
 });
+*/
+
+/////////////////////////////////////////////////////////////////////
+// PROMISIFYING THE GEO-LOCATION API:
+
+// Create a new Promise object that returns user location upon
+// successful resolution:
+const userLocation = function () {
+  return new Promise(function (resolve, reject) {
+    // Obtain user location:
+    // navigator.geolocation.getCurrentPosition(
+    //   location => resolve(location),
+    //   error => reject(error)
+    // );
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+// p.s - the getCurrentPosition method automatically calls the resolve &
+// reject functions & passes in the location from the geo-location API
+// that the Promise's executor function is initiated with!
+
+// userLocation().then(location => console.log(location));
+
+// Build a function like 'whereAmI' which renders a country ONLY based on
+// GPS coordinates:
+const locateMe = function () {
+  // get user location coordinates from promise:
+  userLocation()
+    .then(location => {
+      console.log(location);
+      console.log(location.coords);
+      // destructure the coords object to get latitude & longitude:
+      const { latitude: lat, longitude: lng } = location.coords;
+      // return an AJAX call to the reverse geo-coding api endpoint:
+      return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    })
+    .then(response => {
+      console.log(response);
+      if (!response.ok)
+        throw new Error(`Problem with geocoding ${response.status}`);
+      // return json data from AJAX call:
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      console.log(`You are in ${data.city}, ${data.country}`);
+      getCountryData(`${data.country}`);
+    })
+    .catch(err => console.error(`${err.message} 💥`));
+};
+
+btn.addEventListener(`click`, locateMe);
+// p.s - for some reason this does not work with VPN enabled!
