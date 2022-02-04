@@ -109,3 +109,10 @@ Like many other built0in objects, you can create a promise by you the new constr
 To mark the promise as rejected you do the same. Call the reject function on result of the functionality you want to handle with the catch method. 
 
 
+Promisifying the Geo-location API:
+With the geo-location API's callback nature it operates in a non-blocking fashion. The getting of the users location is passed off to the web-api environment and the code continues running normally. Once the location has been got, whatever functionality you defined in the callbacks will be initiated. And so, all that is the type of JS that is ripe for promises. 
+How It's Done:
+You would first need to create a function that returns a new promise, and just like before, you would need to pass the executor function into the Promise constructor. And that executor function will be initiated with the resolve and reject parameters, which can be used to mark the promise as either fulfilled or rejected. 
+Then you would obtain the user's location using the geo-location API and the getCurrentPosition method as per usual. As the two callbacks that the getCurrentPosition method is initiated with are user's location data upon successful retrieval, and an error if their location was for some reason blocked. You should call the resolve and reject methods that are passed into the executor function inside the success and error callbacks from the getCurrentPosition method respectively. Then you can obviously initiate them with the location and error parameters respectively as well.        
+
+
