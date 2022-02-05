@@ -481,6 +481,63 @@ hide the current image. You will need a global variable for that 😉).
 
 6. After the 2 seconds have passed, hide the current image.
 
-TEST DATA: Images in the img folder. Test the error handler by passing a wrong image path. Set the network speed to 'Fast 3G' in the dev tools Network tab, otherwise images load too fast.
+TEST DATA: Images in the img folder. Test the error handler by passing a wrong image path. 
+Set the network speed to 'Fast 3G' in the dev tools Network tab, otherwise images load too fast.
 GOOD LUCK 😀
 */
+
+// Solution:
+// Content node needed for Part 1:
+const imgBox = document.querySelector(`.images`);
+
+// Wait function needed for Part 2:
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+// Part 1:
+// 1.
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    const image = document.createElement(`img`);
+    image.src = imgPath;
+
+    image.addEventListener(`load`, function () {
+      imgBox.append(image);
+      resolve(image);
+    });
+
+    image.addEventListener(`error`, function () {
+      reject(new Error(`😢 Image Not Found!`));
+    });
+  });
+};
+
+// Part 2:
+let visibleImg;
+
+// 2.
+createImage(`img/img-1.jpg`)
+  // 3.
+  .then(img => {
+    visibleImg = img;
+    return wait(2);
+  })
+  // 4.
+  .then(() => {
+    visibleImg.style.display = `none`;
+    return createImage(`img/img-2.jpg`);
+  })
+  // 5.
+  .then(img => {
+    visibleImg = img;
+    return wait(2);
+  })
+  // 6.
+  .then(() => {
+    visibleImg.style.display = `none`;
+  })
+  .catch(error => console.error(error));
+///////////////////////////////////////////////////////////
