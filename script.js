@@ -487,8 +487,10 @@ GOOD LUCK 😀
 */
 
 // Solution:
+// Content node needed for Part 1:
 const imgBox = document.querySelector(`.images`);
 
+// Wait function needed for Part 2:
 const wait = function (seconds) {
   return new Promise(function (resolve) {
     setTimeout(resolve, seconds * 1000);
@@ -512,3 +514,30 @@ const createImage = function (imgPath) {
     });
   });
 };
+
+// Part 2:
+let visibleImg;
+
+// 2.
+createImage(`img/img-1.jpg`)
+  // 3.
+  .then(img => {
+    visibleImg = img;
+    return wait(2);
+  })
+  // 4.
+  .then(() => {
+    visibleImg.style.display = `none`;
+    return createImage(`img/img-2.jpg`);
+  })
+  // 5.
+  .then(img => {
+    visibleImg = img;
+    return wait(2);
+  })
+  // 6.
+  .then(() => {
+    visibleImg.style.display = `none`;
+  })
+  .catch(error => console.error(error));
+///////////////////////////////////////////////////////////
