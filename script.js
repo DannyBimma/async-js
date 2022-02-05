@@ -481,6 +481,17 @@ hide the current image. You will need a global variable for that 😉).
 
 6. After the 2 seconds have passed, hide the current image.
 
-TEST DATA: Images in the img folder. Test the error handler by passing a wrong image path. Set the network speed to 'Fast 3G' in the dev tools Network tab, otherwise images load too fast.
+TEST DATA: Images in the img folder. Test the error handler by passing a wrong image path. 
+Set the network speed to 'Fast 3G' in the dev tools Network tab, otherwise images load too fast.
 GOOD LUCK 😀
 */
+
+// 1.
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    image = document.createElement(`img`);
+    image.src = imgPath;
+    image.onload = () => document.querySelector(`.images`).appendChild(resolve);
+    image.onerror = reject;
+  });
+};
