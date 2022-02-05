@@ -486,12 +486,29 @@ Set the network speed to 'Fast 3G' in the dev tools Network tab, otherwise image
 GOOD LUCK 😀
 */
 
+// Solution:
+const imgBox = document.querySelector(`.images`);
+
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+// Part 1:
 // 1.
 const createImage = function (imgPath) {
   return new Promise(function (resolve, reject) {
-    image = document.createElement(`img`);
+    const image = document.createElement(`img`);
     image.src = imgPath;
-    image.onload = () => document.querySelector(`.images`).appendChild(resolve);
-    image.onerror = reject;
+
+    image.addEventListener(`load`, function () {
+      imgBox.append(image);
+      resolve(image);
+    });
+
+    image.addEventListener(`error`, function () {
+      reject(new Error(`😢 Image Not Found!`));
+    });
   });
 };
