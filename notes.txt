@@ -147,3 +147,6 @@ The finally-block will always execute after the try-block and catch-block(s) hav
 
 You can nest one or more try statements. If an inner try statement does not have a catch-block, the enclosing try statement's catch-block is used instead. 
 
+
+Returning Values from Async Functions:
+

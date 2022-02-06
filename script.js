@@ -548,8 +548,8 @@ createImage(`img/img-1.jpg`)
 ///////////////////////////////////////////////////////////
 */
 
-// CONSUMING PROMISES WITH ASYNC/AWAIT:
-// Using the rest countries API with async/await:
+// CONSUMING PROMISES WITH ASYNC/AWAIT & try...catch:
+// Using the web APIs with async/await & try...catch:
 
 try {
   const showCountry = async function (country) {
@@ -587,9 +587,11 @@ try {
     renderCountry(data[0]);
   };
 
-  showCountry();
+  // showCountry();
 } catch (error) {
   console.error(error);
 }
-// p.s - like previous attempt, the code above throws errors when VPN is active
-//
+
+// p.s - like previous attempt, the code above throws errors when using VPN!
+
+// RETURNING VALUES FROM ASYNC FUNCTIONS:
