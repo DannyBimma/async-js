@@ -124,3 +124,29 @@ await can be put in front of any async promise-based function to pause your code
 You can use await when calling any function that returns a Promise, including web API functions.
 
 
+Error Handling with Try Catch:
+The try...catch statement marks a block of statements to try and specifies a response should an exception be thrown. 
+
+try {
+  nonExistentFunction();
+} catch (error) {
+  console.error(error);
+  // expected output: ReferenceError: nonExistentFunction is not defined
+  // Note - error messages will vary depending on browser
+}
+
+The try statement consists of a try-block, which contains one or more statements. {} must always be used, even for single statements. A catch-block, a finally-block, or both must be present. This gives us three forms for the try statement:
+
+
+    try...catch
+    try...finally
+    try...catch...finally
+
+A catch-block contains statements that specify what to do if an exception is thrown in the try-block. If any statement within the try-block (or in a function called from within the try-block) throws an exception, control is immediately shifted to the catch-block. If no exception is thrown in the try-block, the catch-block is skipped. 
+The finally-block will always execute after the try-block and catch-block(s) have finished executing. It always executes, regardless of whether an exception was thrown or caught.
+
+You can nest one or more try statements. If an inner try statement does not have a catch-block, the enclosing try statement's catch-block is used instead. 
+
+
+Returning Values from Async Functions:
+
