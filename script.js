@@ -486,6 +486,7 @@ Set the network speed to 'Fast 3G' in the dev tools Network tab, otherwise image
 GOOD LUCK 😀
 */
 
+/*
 // Solution:
 // Content node needed for Part 1:
 const imgBox = document.querySelector(`.images`);
@@ -545,22 +546,50 @@ createImage(`img/img-1.jpg`)
   })
   .catch(error => console.error(error));
 ///////////////////////////////////////////////////////////
+*/
 
 // CONSUMING PROMISES WITH ASYNC/AWAIT:
 // Using the rest countries API with async/await:
-const showCountry = async function (country) {
-  const response = await fetch(
-    `https://restcountries.com/v3.1/name/${country}`
-  );
 
-  if (!response.ok) return;
+try {
+  const showCountry = async function (country) {
+    // obtain user location:
+    const location = await userLocation();
+    console.log(location);
+    // destructure the coords object to get latitude & longitude:
+    const { latitude: lat, longitude: lng } = location.coords;
+    // ajax call to geocode api:
+    const geoResponse = await fetch(
+      `https://geocode.xyz/${lat},${lng}?geoit=json`
+    );
 
-  const data = await response.json();
+    if (!geoResponse.ok)
+      throw new Error(`😱 Location retrieval error: Check VPN!!`);
 
-  console.log(response);
-  console.log(data);
-  console.log(data[0]);
-  renderCountry(data[0]);
-};
+    console.log(geoResponse);
+    // convert data stream to json object:
+    const geoData = await geoResponse.json();
+    console.log(geoData);
+    // ajax call to rest-countries api endpoint:
+    const response = await fetch(
+      `https://restcountries.com/v3.1/name/${geoData.country}`
+    );
 
-showCountry(`Barbados`);
+    if (!response.ok)
+      throw new Error(`😱 API endpoint error: Check restcountries API!!`);
+
+    // convert data stream to json object:
+    const data = await response.json();
+
+    console.log(response);
+    console.log(data);
+    console.log(data[0]);
+    renderCountry(data[0]);
+  };
+
+  showCountry();
+} catch (error) {
+  console.error(error);
+}
+// p.s - like previous attempt, the code above throws errors when VPN is active
+//
