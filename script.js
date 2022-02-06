@@ -177,7 +177,7 @@ const renderCountry = function (countryData, className = ``) {
    </article>`;
 
   countriesContainer.insertAdjacentHTML(`beforeend`, html);
-  // countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
 };
 
 // Create function to display errors to users:
@@ -545,3 +545,22 @@ createImage(`img/img-1.jpg`)
   })
   .catch(error => console.error(error));
 ///////////////////////////////////////////////////////////
+
+// CONSUMING PROMISES WITH ASYNC/AWAIT:
+// Using the rest countries API with async/await:
+const showCountry = async function (country) {
+  const response = await fetch(
+    `https://restcountries.com/v3.1/name/${country}`
+  );
+
+  if (!response.ok) return;
+
+  const data = await response.json();
+
+  console.log(response);
+  console.log(data);
+  console.log(data[0]);
+  renderCountry(data[0]);
+};
+
+showCountry(`Barbados`);
