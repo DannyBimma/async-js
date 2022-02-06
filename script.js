@@ -499,19 +499,21 @@ const wait = function (seconds) {
 
 // Part 1:
 // 1.
+// Create function that returns a promise:
 const createImage = function (imgPath) {
   return new Promise(function (resolve, reject) {
+    // create a new image & set source:
     const image = document.createElement(`img`);
     image.src = imgPath;
-
-    image.addEventListener(`load`, function () {
+    // when loaded append to DOM & resolve:
+    image.onload = function () {
       imgBox.append(image);
       resolve(image);
-    });
-
-    image.addEventListener(`error`, function () {
-      reject(new Error(`😢 Image Not Found!`));
-    });
+    };
+    // on error reject:
+    image.onerror = function () {
+      reject(new Error(`😢 Image path corrupted!`));
+    };
   });
 };
 
@@ -522,6 +524,7 @@ let visibleImg;
 createImage(`img/img-1.jpg`)
   // 3.
   .then(img => {
+    console.log(`img-1 loaded`);
     visibleImg = img;
     return wait(2);
   })
@@ -532,6 +535,7 @@ createImage(`img/img-1.jpg`)
   })
   // 5.
   .then(img => {
+    console.log(`img-2 loaded`);
     visibleImg = img;
     return wait(2);
   })
