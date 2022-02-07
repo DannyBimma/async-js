@@ -604,12 +604,46 @@ console.log(`1: GET LOCATION`);
 //   .finally(() => console.log(`3: LOCATION GOT`));
 
 // RETURNING VALUES FROM ASYNC FUNCTIONS WITH ASYNC FUNCTION:
-(async function () {
+// (async function () {
+//   try {
+//     const city = await showCountry();
+//     console.log(`2: ${city}`);
+//   } catch (error) {
+//     console.log(`2: ${error.message}`);
+//   }
+//   console.log(`3: LOCATION GOT`);
+// })();
+
+// RUNNING PROMISES IN PARALLEL:
+
+const triCountryGetter = async function (country1, country2, country3) {
   try {
-    const city = await showCountry();
-    console.log(`2: ${city}`);
-  } catch (error) {
-    console.log(`2: ${error.message}`);
+    // make 3 calls to rest-countries api
+    // const [c1Data] = await bootJSON(
+    //   `https://restcountries.com/v3.1/name/${country1}`
+    // );
+
+    // const [c2Data] = await bootJSON(
+    //   `https://restcountries.com/v3.1/name/${country2}`
+    // );
+
+    // const [c3Data] = await bootJSON(
+    //   `https://restcountries.com/v3.1/name/${country3}`
+    // );
+    // console.log(c1Data.capital[0], c2Data.capital[0], c3Data.capital[0]);
+
+    // make 3 calls to rest-countries api simultaneously:
+    const countryData = await Promise.all([
+      bootJSON(`https://restcountries.com/v3.1/name/${country1}`),
+      bootJSON(`https://restcountries.com/v3.1/name/${country2}`),
+      bootJSON(`https://restcountries.com/v3.1/name/${country3}`),
+    ]);
+
+    console.log(countryData);
+    console.log(countryData.map(data => data[0].capital[0]));
+  } catch (e) {
+    console.log(e.message);
   }
-  console.log(`3: LOCATION GOT`);
-})();
+};
+
+triCountryGetter(`Barbados`, `Ghana`, `Canada`);

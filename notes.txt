@@ -149,5 +149,9 @@ You can nest one or more try statements. If an inner try statement does not have
 
 
 Returning Values from Async Functions:
-An async function ALWAYS return a promise, even if you explicitly define a value for an async function to return it will return a promise that will produce that value once consumed. The value that you return from an async function will become the fulfilled value of that function's promise. Meaning that once you return a value from an async function, you can handle as normal with then, catch, and finally. But that's mixing old and new conventions. To do it all with async functions, simply consume the promise using an async IIFE, with a try...catch, and await.   
+An async function ALWAYS return a promise, even if you explicitly define a value for an async function to return it will return a promise that will produce that value once consumed. The value that you return from an async function will become the fulfilled value of that function's promise. Meaning that once you return a value from an async function, you can handle as normal with then, catch, and finally. But that's mixing old and new conventions. To do it all with async functions, simply consume the promise using an async IIFE, with a try...catch, and await. 
+
+
+Running Promises in Parallel:
+If you have to make multiple calls to an api endpoint to get some series of data that don't depend on each other, you may want to make all those calls simultaneously. To do so you just need to use the Promise.all() static method in the Promise constructor. This function creates a Promise that is resolved with an array of results when all of the provided Promises resolve, or rejected when any of the Promises are rejected.
 
