@@ -585,13 +585,31 @@ const showCountry = async function () {
     console.log(data);
     console.log(data[0]);
     renderCountry(data[0]);
+
+    return `You are in the city of ${data[0].city}!`;
   } catch (error) {
     console.error(error);
+
+    // rethrow error that was caught:
+    throw error;
   }
 };
-
-showCountry();
-
 // p.s - like previous attempt, the code above throws errors when using VPN!
 
 // RETURNING VALUES FROM ASYNC FUNCTIONS:
+console.log(`1: GET LOCATION`);
+// showCountry()
+//   .then(value => console.log(value))
+//   .catch(error => console.error(`2: ${error.message}`))
+//   .finally(() => console.log(`3: LOCATION GOT`));
+
+// RETURNING VALUES FROM ASYNC FUNCTIONS WITH ASYNC FUNCTION:
+(async function () {
+  try {
+    const city = await showCountry();
+    console.log(`2: ${city}`);
+  } catch (error) {
+    console.log(`2: ${error.message}`);
+  }
+  console.log(`3: LOCATION GOT`);
+})();

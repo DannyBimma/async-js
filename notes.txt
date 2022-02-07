@@ -149,4 +149,5 @@ You can nest one or more try statements. If an inner try statement does not have
 
 
 Returning Values from Async Functions:
+An async function ALWAYS return a promise, even if you explicitly define a value for an async function to return it will return a promise that will produce that value once consumed. The value that you return from an async function will become the fulfilled value of that function's promise. Meaning that once you return a value from an async function, you can handle as normal with then, catch, and finally. But that's mixing old and new conventions. To do it all with async functions, simply consume the promise using an async IIFE, with a try...catch, and await.   
 
