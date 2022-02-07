@@ -551,8 +551,8 @@ createImage(`img/img-1.jpg`)
 // CONSUMING PROMISES WITH ASYNC/AWAIT & try...catch:
 // Using the web APIs with async/await & try...catch:
 
-try {
-  const showCountry = async function (country) {
+const showCountry = async function () {
+  try {
     // obtain user location:
     const location = await userLocation();
     console.log(location);
@@ -585,12 +585,12 @@ try {
     console.log(data);
     console.log(data[0]);
     renderCountry(data[0]);
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-  // showCountry();
-} catch (error) {
-  console.error(error);
-}
+showCountry();
 
 // p.s - like previous attempt, the code above throws errors when using VPN!
 
