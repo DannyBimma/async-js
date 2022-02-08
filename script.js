@@ -800,4 +800,22 @@ const loadAndPause = async function () {
   }
 };
 
-loadAndPause();
+// loadAndPause();
+
+// Part 2:
+// 1:
+const loadAll = async function (imgArray) {
+  try {
+    // 2.
+    const imgs = imgArray.map(async image => await createImage(image));
+    // 3. 4.
+    const imgPaths = await Promise.all(imgs);
+    console.log(imgPaths);
+    // 5.
+    imgPaths.forEach(image => image.classList.add(`parallel`));
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+loadAll([`img/img-1.jpg`, `img/img-2.jpg`, `img/img-3.jpg`]);
