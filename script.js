@@ -740,3 +740,64 @@ TEST DATA: ['img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg'].
 To test, turn off the 'loadNPause' function.
 GOOD LUCK 😀
 */
+
+const imgBox = document.querySelector(`.images`);
+
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+// Part 1:
+// Create function that returns a promise:
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    // create a new image & set source:
+    const image = document.createElement(`img`);
+    image.src = imgPath;
+    // when loaded append to DOM & resolve:
+    image.onload = function () {
+      imgBox.append(image);
+      resolve(image);
+    };
+    // on error reject:
+    image.onerror = function () {
+      reject(new Error(`😢 Image path corrupted!`));
+    };
+  });
+};
+
+let visibleImg;
+
+const loadAndPause = async function () {
+  // display then hide image 1:
+  try {
+    visibleImg = await createImage(`img/img-1.jpg`);
+    await wait(2);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    visibleImg.style.display = `none`;
+  }
+  // display then hide image 2:
+  try {
+    visibleImg = await createImage(`img/img-2.jpg`);
+    await wait(2);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    visibleImg.style.display = `none`;
+  }
+  // display then hide image 3:
+  try {
+    visibleImg = await createImage(`img/img-3.jpg`);
+    await wait(2);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    visibleImg.style.display = `none`;
+  }
+};
+
+loadAndPause();

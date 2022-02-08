@@ -115,6 +115,7 @@ How It's Done:
 You would first need to create a function that returns a new promise, and just like before, you would need to pass the executor function into the Promise constructor. And that executor function will be initiated with the resolve and reject parameters, which can be used to mark the promise as either fulfilled or rejected. 
 Then you would obtain the user's location using the geo-location API and the getCurrentPosition method as per usual. As the two callbacks that the getCurrentPosition method is initiated with are user's location data upon successful retrieval, and an error if their location was for some reason blocked. You should call the resolve and reject methods that are passed into the executor function inside the success and error callbacks from the getCurrentPosition method respectively. Then you can obviously initiate them with the location and error parameters respectively as well.       
 
+
 Consuming Promises with Async/Await:
 More recent additions to the JavaScript language are async functions and the await keyword, added in ECMAScript 2017. These features basically act as syntactic sugar on top of promises, making asynchronous code easier to write and to read afterwards. They make async code look more like old-school synchronous code, so they're well worth learning. This article gives you what you need to know.
 There are two parts to using async/await in your code. First of all we have the async keyword, which you put in front of a function declaration to turn it into an async function. An async function is a function that knows how to expect the possibility of the await keyword being used to invoke asynchronous code. So the async keyword is added to functions to tell them to return a promise rather than directly returning the value.
@@ -122,7 +123,6 @@ The await keyword.
 The advantage of an async function only becomes apparent when you combine it with the await keyword. await only works inside async functions within regular JavaScript code, however it can be used on its own with JavaScript modules.
 await can be put in front of any async promise-based function to pause your code on that line until the promise fulfills, then return the resulting value.
 You can use await when calling any function that returns a Promise, including web API functions.
-
 
 Error Handling with Try Catch:
 The try...catch statement marks a block of statements to try and specifies a response should an exception be thrown. 
@@ -206,3 +206,33 @@ Promise.any(promises).then((value) => console.log(value));
 // expected output: "quick"
 
 This method is useful for returning the first promise that fulfills. It short-circuits after a promise fulfills, so it does not wait for the other promises to complete once it finds one. Unlike Promise.all(), which returns an array of fulfillment values, we only get one fulfillment value (assuming at least one promise fulfills). This can be beneficial if we need only one promise to fulfill but we do not care which one does. Note another difference: This method rejects upon receiving an empty iterable, since, truthfully, the iterable contains no items that fulfill. Also, unlike Promise.race(), which returns the first settled value (either fulfillment or rejection), this method returns the first fulfilled value. This method will ignore all rejected promises up until the first promise that fulfils.
+
+
+
+// Part 2:
+let visibleImg;
+
+// 2.
+createImage(`img/img-1.jpg`)
+  // 3.
+  .then(img => {
+    console.log(`img-1 loaded`);
+    visibleImg = img;
+    return wait(2);
+  })
+  // 4.
+  .then(() => {
+    visibleImg.style.display = `none`;
+    return createImage(`img/img-2.jpg`);
+  })
+  // 5.
+  .then(img => {
+    console.log(`img-2 loaded`);
+    visibleImg = img;
+    return wait(2);
+  })
+  // 6.
+  .then(() => {
+    visibleImg.style.display = `none`;
+  })
+  .catch(error => console.error(error));
